@@ -1,1 +1,79 @@
+pip install pandas matplotlib seaborn
+
+ Summary
+This code analyzes:
+
+Top run scorers
+
+Top wicket takers
+
+Highest strike rate batsmen (min 500 balls)
+
+Most sixes
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load datasets
+matches = pd.read_csv('matches.csv')
+deliveries = pd.read_csv('deliveries.csv')
+
+# Preview data
+print("Matches:\n", matches.head())
+print("Deliveries:\n", deliveries.head())
+top_scorers = deliveries.groupby('batsman')['batsman_runs'].sum().sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(10,6))
+top_scorers.plot(kind='barh', color='skyblue')
+plt.xlabel("Total Runs")
+plt.title("Top 10 Run Scorers in IPL")
+plt.gca().invert_yaxis()
+plt.show()
+
+# Filter only dismissals attributed to bowlers
+dismissals = deliveries[deliveries['dismissal_kind'].isin(['bowled', 'caught', 'lbw', 'stumped', 'caught and bowled', 'hit wicket'])]
+
+top_wicket_takers = dismissals['bowler'].value_counts().head(10)
+
+plt.figure(figsize=(10,6))
+top_wicket_takers.plot(kind='barh', color='orange')
+plt.xlabel("Wickets")
+plt.title("Top 10 Wicket Takers in IPL")
+plt.gca().invert_yaxis()
+plt.show()
+
+# Filter only dismissals attributed to bowlers
+dismissals = deliveries[deliveries['dismissal_kind'].isin(['bowled', 'caught', 'lbw', 'stumped', 'caught and bowled', 'hit wicket'])]
+
+top_wicket_takers = dismissals['bowler'].value_counts().head(10)
+
+plt.figure(figsize=(10,6))
+top_wicket_takers.plot(kind='barh', color='orange')
+plt.xlabel("Wickets")
+plt.title("Top 10 Wicket Takers in IPL")
+plt.gca().invert_yaxis()
+plt.show()
+# Count balls faced
+balls_faced = deliveries[deliveries['wide_runs'] == 0].groupby('batsman')['ball'].count()
+total_runs = deliveries.groupby('batsman')['batsman_runs'].sum()
+
+strike_rate = (total_runs / balls_faced) * 100
+strike_rate = strike_rate[balls_faced > 500].sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(10,6))
+strike_rate.plot(kind='barh', color='green')
+plt.xlabel("Strike Rate")
+plt.title("Top 10 Batsmen by Strike Rate (min 500 balls)")
+plt.gca().invert_yaxis()
+plt.show()
+
+sixes = deliveries[deliveries['batsman_runs'] == 6]['batsman'].value_counts().head(10)
+
+plt.figure(figsize=(10,6))
+sixes.plot(kind='barh', color='purple')
+plt.xlabel("Number of Sixes")
+plt.title("Top 10 Six Hitters in IPL")
+plt.gca().invert_yaxis()
+plt.show()
 
