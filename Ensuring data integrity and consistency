@@ -1,0 +1,57 @@
+import pandas as pd
+
+# Load datasets
+matches = pd.read_csv("cleaned_matches.csv")
+deliveries = pd.read_csv("cleaned_deliveries.csv")
+
+Step 1  Check for Unique Identifiers
+Ensure id in matches is unique.
+Ensure match_id in deliveries refers to valid match IDs from matches.
+
+# Check for unique match IDs
+print("Unique Match IDs in matches.csv:", matches['id'].nunique())
+print("Total rows in matches.csv:", matches.shape[0])
+
+# Confirm deliveries match match IDs
+invalid_ids = deliveries[~deliveries['match_id'].isin(matches['id'])]['match_id'].unique()
+print("Invalid match IDs in deliveries (should be empty):", invalid_ids)
+
+Fix: Drop invalid deliveries if needed:
+
+deliveries = deliveries[deliveries['match_id'].isin(matches['id'])]
+
+Step 2 Standardize Team and Player Names
+Ensure consistent team names
+
+print("Unique team names from matches:")
+print(pd.unique(matches[['team1', 'team2', 'toss_winner', 'winner']].values.ravel()))
+
+print("\nUnique team names from deliveries:")
+print(pd.unique(deliveries[['batting_team', 'bowling_team']].values.ravel()))
+
+ Fixing inconsistent team names (if any):
+team_name_corrections = {
+    'Rising Pune Supergiants': 'Rising Pune Supergiant',
+    'Delhi Daredevils': 'Delhi Capitals'
+    # Add more mappings as needed
+}
+
+matches.replace(team_name_corrections, inplace=True)
+deliveries.replace(team_name_corrections, inplace=True)
+
+
+Step 3: Check for Time Consistency
+Ensure match seasons are ordered correctly:
+
+print(matches[['id', 'season']].sort_values(by='id').tail(10))
+# Check for duplicate match IDs
+duplicate_ids = matches[matches.duplicated(subset='id', keep=False)]
+print("Duplicate match IDs:\n", duplicate_ids)
+
+# Remove duplicates
+matches = matches.drop_duplicates(subset='id', keep='first')
+
+STEP 4 : Save the Verified Clean Data
+
+matches.to_csv("verified_matches.csv", index=False)
+deliveries.to_csv("verified_deliveries.csv", index=False)
