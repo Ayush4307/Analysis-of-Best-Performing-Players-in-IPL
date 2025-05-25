@@ -1,0 +1,79 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+# Load datasets
+deliveries = pd.read_csv('verified_deliveries.csv')
+matches = pd.read_csv('verified_matches.csv')
+
+PART 1: Handling Outliers
+1. Visualize Outliers - Total Runs in a Match
+
+match_runs = deliveries.groupby('match_id')['total_runs'].sum()
+
+plt.figure(figsize=(10, 5))
+sns.boxplot(x=match_runs)
+plt.title("Boxplot of Total Runs per Match")
+plt.xlabel("Total Runs")
+plt.show()
+
+    # Outlier Threshold (IQR Method)
+
+Q1 = match_runs.quantile(0.25)
+Q3 = match_runs.quantile(0.75)
+IQR = Q3 - Q1
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+outliers = match_runs[(match_runs < lower) | (match_runs > upper)]
+print("Outlier Matches (based on total runs):\n", outliers)
+
+    # Options for Handling Outliers:
+
+# Option 1: Remove outliers (if distorting your model)
+filtered_matches = match_runs[(match_runs >= lower) & (match_runs <= upper)]
+
+# Option 2: Cap outliers (Winsorization)
+capped_runs = match_runs.clip(lower=lower, upper=upper)
+
+PART 2: Data Transformations
+When data is skewed (especially for regression/ML), applying transformations helps normalize it.
+
+1. Log Transformation
+For right-skewed data like total_runs:
+
+python
+Copy
+Edit
+import scipy.stats as stats
+
+# Add 1 to avoid log(0)
+match_runs_log = np.log1p(match_runs)
+
+plt.figure(figsize=(10,5))
+sns.histplot(match_runs_log, bins=30, kde=True)
+plt.title("Log-Transformed Total Runs")
+plt.xlabel("Log(Total Runs)")
+plt.show()
+   2. Z-Score Normalization
+Use for outlier detection or standardizing features before modeling:
+
+from scipy.stats import zscore
+
+batsman_total = deliveries.groupby('batsman')['batsman_runs'].sum()
+batsman_total_z = zscore(batsman_total)
+
+# Outliers beyond z=3
+outliers = batsman_total[np.abs(batsman_total_z) > 3]
+print("Outlier batsmen based on total runs:\n", outliers)
+3. Min-Max Scaling (for ML models)
+
+from sklearn.preprocessing import MinMaxScaler
+# Example: scale batsman total runs
+scaler = MinMaxScaler()
+batsman_total_scaled = scaler.fit_transform(batsman_total.values.reshape(-1, 1))
+
+plt.plot(batsman_total_scaled[:100])  # sample plot
+plt.title("Min-Max Scaled Batsman Runs")
+plt.show()
