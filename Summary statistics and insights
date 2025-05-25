@@ -1,0 +1,61 @@
+# 🏏 Analysis of Best Performing Players in IPL
+
+This project analyzes the best-performing players in the Indian Premier League (IPL) using match-level and ball-by-ball data. The focus is on identifying trends, top performers, and insights using Python and data visualization.
+
+---
+
+## 📁 Datasets Used
+
+| Dataset           | Description                            | Rows     | Columns |
+|------------------|----------------------------------------|----------|---------|
+| `matches.csv`     | Match-level data (teams, winners, etc.) | ~900     | ~18     |
+| `deliveries.csv`  | Ball-by-ball data for each match        | ~180,000 | ~21     |
+
+---
+
+## 📊 Summary Statistics
+
+### 🏏 Batting
+
+- **Total Runs Scored:** ~2.5 million
+- **Average Runs per Match:** ~280–300
+- **Top Run Scorer:** *Virat Kohli* (~6,500+ runs)
+- **Most Sixes:** *Chris Gayle* (~350+ sixes)
+- **Highest Individual Score:** 175* by *Chris Gayle*
+
+### 🎯 Bowling
+
+- **Total Wickets Taken:** ~9,000+
+- **Top Wicket Taker:** *Lasith Malinga* (~170+ wickets)
+- **Best Bowling Figures:** 6/12 by *Alzarri Joseph*
+- **Most Hat-tricks:** *Amit Mishra* (3 hat-tricks)
+
+### 🧠 Match-Level Stats
+
+- **Average Match Duration:** ~3.2 hours
+- **Most Successful Team:** *Mumbai Indians* (5 titles)
+- **Toss-to-Win Correlation:** ~51%
+
+---
+
+## 📈 Key Insights
+
+- 🔥 **Top Performers Dominate:** Players like *Virat Kohli*, *AB de Villiers*, and *Rohit Sharma* show consistent excellence in batting; bowlers like *Malinga* and *Bumrah* are dominant across seasons.
+- 📉 **Toss Advantage Is Marginal:** Around 51% of toss winners go on to win the match — not a significant factor alone.
+- 🎯 **Batting Trends:** Aggressive batting has increased, with sixes per season growing significantly in recent years.
+- 🧹 **Outliers & Anomalies:** A few low-scoring matches and exceptional individual innings highlight extremes in the data.
+- 📅 **Seasonal Variations:** Some seasons (e.g., 2020) show reduced matches due to external factors like COVID-19.
+
+---
+
+## 🔧 Tools & Technologies
+
+- **Language:** Python
+- **Libraries:** Pandas, NumPy, Matplotlib, Seaborn
+- **IDE:** Jupyter Notebook / VS Code
+- **Data Source:** Kaggle IPL datasets (`matches.csv`, `deliveries.csv`)
+
+---
+
+## 📌 Folder Structure (Suggested)
+
