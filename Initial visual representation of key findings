@@ -1,0 +1,81 @@
+✅ Key Visual Insights:
+
+Top run-scorers
+Top wicket-takers
+Most Player of the Match awards
+Runs trend over seasons
+Sixes trend
+Toss win vs Match win correlation
+
+   1. Top 10 Run Scorers
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+deliveries = pd.read_csv('verified_deliveries.csv')
+top_batsmen = deliveries.groupby('batsman')['batsman_runs'].sum().sort_values(ascending=False).head(10)
+plt.figure(figsize=(10,5))
+sns.barplot(x=top_batsmen.values, y=top_batsmen.index, palette="viridis")
+plt.title("Top 10 Run Scorers in IPL")
+plt.xlabel("Total Runs")
+plt.ylabel("Batsman")
+plt.show()
+
+   2. Top 10 Wicket Takers
+
+# Only dismissals attributed to a bowler
+dismissals = deliveries[deliveries['dismissal_kind'].isin(
+    ['bowled', 'caught', 'lbw', 'stumped', 'caught and bowled', 'hit wicket'])]
+
+top_bowlers = dismissals['bowler'].value_counts().head(10)
+plt.figure(figsize=(10,5))
+sns.barplot(x=top_bowlers.values, y=top_bowlers.index, palette="magma")
+plt.title("Top 10 Wicket Takers in IPL")
+plt.xlabel("Total Wickets")
+plt.ylabel("Bowler")
+plt.show()
+     3. Player of the Match – Top 10
+
+matches = pd.read_csv('verified_matches.csv')
+mom_counts = matches['player_of_match'].value_counts().head(10)
+plt.figure(figsize=(10,5))
+sns.barplot(x=mom_counts.values, y=mom_counts.index, palette="plasma")
+plt.title("Top 10 Player of the Match Winners")
+plt.xlabel("Awards")
+plt.ylabel("Player")
+plt.show()
+     4. Total Runs Scored Each Season
+
+# Merge deliveries with season info
+deliveries_season = deliveries.merge(matches[['id', 'season']], left_on='match_id', right_on='id')
+runs_by_season = deliveries_season.groupby('season')['total_runs'].sum()
+plt.figure(figsize=(10,5))
+sns.lineplot(x=runs_by_season.index, y=runs_by_season.values, marker='o')
+plt.title("Total Runs per IPL Season")
+plt.xlabel("Season")
+plt.ylabel("Total Runs")
+plt.grid(True)
+plt.show()
+
+ 5. Total Sixes Each Season
+
+sixes = deliveries[deliveries['batsman_runs'] == 6].merge(matches[['id', 'season']], left_on='match_id', right_on='id')
+sixes_per_season = sixes.groupby('season').size()
+
+plt.figure(figsize=(10,5))
+sns.barplot(x=sixes_per_season.index, y=sixes_per_season.values, palette='coolwarm')
+plt.title("Total Sixes per Season")
+plt.xlabel("Season")
+plt.ylabel("Number of Sixes")
+plt.show()
+
+   6. Toss Win vs Match Win
+
+toss_wins = matches[matches['toss_winner'] == matches['winner']]
+toss_win_rate = len(toss_wins) / len(matches) * 100
+plt.figure(figsize=(6,6))
+plt.pie([toss_win_rate, 100 - toss_win_rate], labels=['Won Toss & Match', 'Others'],
+        autopct='%1.1f%%', colors=['green', 'gray'], startangle=90)
+plt.title("Impact of Toss Win on Match Outcome")
+plt.show()
