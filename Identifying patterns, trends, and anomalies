@@ -1,0 +1,91 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+# Load cleaned and verified datasets
+matches = pd.read_csv('verified_matches.csv')
+deliveries = pd.read_csv('verified_deliveries.csv')
+
+STEP 1 Match Trends Over the Years
+a. Number of Matches per Season
+
+season_matches = matches['season'].value_counts().sort_index()
+plt.figure(figsize=(10,5))
+sns.lineplot(x=season_matches.index, y=season_matches.values, marker='o')
+plt.title("Number of Matches per Season")
+plt.xlabel("Season")
+plt.ylabel("Number of Matches")
+plt.grid(True)
+plt.show()
+
+STEP 2 Top Players by "Player of the Match" Awards
+
+top_players = matches['player_of_match'].value_counts().head(10)
+plt.figure(figsize=(10,5))
+sns.barplot(x=top_players.values, y=top_players.index, palette="viridis")
+plt.title("Top 10 Players by Player of the Match Awards")
+plt.xlabel("Number of Awards")
+plt.show()
+
+STEP 3  Team Performance Over Time
+
+team_trend = matches.groupby(['season', 'winner']).size().reset_index(name='wins')
+pivot = team_trend.pivot(index='season', columns='winner', values='wins').fillna(0)
+pivot.plot(kind='line', figsize=(12,6), marker='o')
+plt.title("Team Wins Across Seasons")
+plt.xlabel("Season")
+plt.ylabel("Wins")
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+STEP 4 . Run Scoring Trend Over Seasons
+# Merge deliveries with matches to add season info
+
+deliveries_season = deliveries.merge(matches[['id', 'season']], left_on='match_id', right_on='id')
+runs_per_season = deliveries_season.groupby('season')['total_runs'].sum()
+plt.figure(figsize=(10,5))
+sns.barplot(x=runs_per_season.index, y=runs_per_season.values, palette='coolwarm')
+plt.title("Total Runs Scored Each Season")
+plt.xlabel("Season")
+plt.ylabel("Total Runs")
+plt.show()
+
+STEP 5  Anomaly Detection – Very Low Scoring Matches
+
+match_runs = deliveries.groupby('match_id')['total_runs'].sum().reset_index()
+low_scoring_matches = match_runs[match_runs['total_runs'] < 100]  # Anomaly threshold
+
+print("Anomalously low scoring matches (total runs < 100):")
+print(low_scoring_matches.sort_values(by='total_runs'))
+
+# Optionally merge with match info
+anomalies = low_scoring_matches.merge(matches, left_on='match_id', right_on='id')
+print(anomalies[['season', 'team1', 'team2', 'winner', 'total_runs']])
+
+STEP 6 Sixes Trend by Season
+
+sixes = deliveries[deliveries['batsman_runs'] == 6].merge(matches[['id', 'season']], left_on='match_id', right_on='id')
+sixes_per_season = sixes.groupby('season').size()
+plt.figure(figsize=(10,5))
+sns.lineplot(x=sixes_per_season.index, y=sixes_per_season.values, marker='o')
+plt.title("Number of Sixes per Season")
+plt.xlabel("Season")
+plt.ylabel("Total Sixes")
+plt.grid(True)
+plt.show()
+
+STEP 7 Most Consistent Batsmen (Standard Deviation)
+# Get total runs per player per match
+
+batsman_match_runs = deliveries.groupby(['match_id', 'batsman'])['batsman_runs'].sum().reset_index()
+
+# Compute standard deviation of runs per match
+batsman_std = batsman_match_runs.groupby('batsman')['batsman_runs'].std().dropna()
+batsman_std = batsman_std[batsman_std.index.isin(
+    batsman_match_runs['batsman'].value_counts()[lambda x: x > 30].index)]  # Filter with >30 matches
+
+consistent_batsmen = batsman_std.sort_values().head(10)
+print("Most consistent batsmen (least std deviation in match runs):\n", consistent_batsmen)
