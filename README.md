@@ -40,11 +40,6 @@ Outputs
 - Top 10 Bowlers by Wickets
 - Visualizations for key insights
 
-## 📦 Dataset
-Download the dataset from: [Kaggle - IPL Data Set](https://www.kaggle.com/datasets/ramjidoolla/ipl-data-set)
-Place `matches.csv` and `deliveries.csv` in the `data/` folder.
-"""
-
 with open(os.path.join(project_root, "README.md"), "w") as f:
     f.write(readme_content)
 
