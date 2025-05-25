@@ -1,0 +1,49 @@
+Step 1: Load Required Libraries and Data
+
+import pandas as pd
+
+# Load datasets
+matches = pd.read_csv('matches.csv')
+deliveries = pd.read_csv('deliveries.csv')
+
+# Display basic info
+print("Matches dataset:")
+print(matches.info())
+print("\nDeliveries dataset:")
+print(deliveries.info())
+
+STEP 2: Check for Missing Values
+
+print("Missing values in matches:\n", matches.isnull().sum())
+print("\nMissing values in deliveries:\n", deliveries.isnull().sum())
+
+STEP 3: Handle Missing Values in matches.csv
+
+# Drop columns not useful for analysis (if any)
+matches_cleaned = matches.drop(columns=['umpire3'], errors='ignore')  # umpire3 is mostly NaN
+
+# Fill missing values
+matches_cleaned['city'].fillna('Unknown', inplace=True)
+matches_cleaned['winner'].fillna('No Result', inplace=True)
+matches_cleaned['umpire1'].fillna('Unknown', inplace=True)
+matches_cleaned['umpire2'].fillna('Unknown', inplace=True)
+
+# Final check
+print("Missing values in cleaned matches:\n", matches_cleaned.isnull().sum())
+
+STEP 4: Handle Missing Values in deliveries.csv
+
+# Usually minimal or no missing values in deliveries, but check just in case
+deliveries_cleaned = deliveries.fillna({
+    'dismissal_kind': 'not_dismissed',
+    'player_dismissed': 'None',
+    'fielder': 'None'
+})
+
+# Final check
+print("Missing values in cleaned deliveries:\n", deliveries_cleaned.isnull().sum())
+
+STEP 5: Save Cleaned Data (Optional)
+
+matches_cleaned.to_csv("cleaned_matches.csv", index=False)
+deliveries_cleaned.to_csv("cleaned_deliveries.csv", index=False)
