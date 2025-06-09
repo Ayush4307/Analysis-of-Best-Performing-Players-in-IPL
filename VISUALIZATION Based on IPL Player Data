@@ -1,0 +1,85 @@
+1. Top 10 Batsmen by Total Runs
+   CODE -
+         import matplotlib.pyplot as plt
+import seaborn as sns
+
+top_batsmen = df.groupby('batsman')['batsman_runs'].sum().sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=top_batsmen.values, y=top_batsmen.index, palette='magma')
+plt.title('Top 10 Batsmen by Total Runs')
+plt.xlabel('Total Runs')
+plt.ylabel('Batsman')
+plt.tight_layout()
+plt.show()
+
+  
+2. Top 10 Bowlers by Total Wickets
+  CODE -
+        top_bowlers = df[df['dismissal_kind'].notna()]
+top_wickets = top_bowlers.groupby('bowler')['player_dismissed'].count().sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=top_wickets.values, y=top_wickets.index, palette='crest')
+plt.title('Top 10 Bowlers by Total Wickets')
+plt.xlabel('Wickets Taken')
+plt.ylabel('Bowler')
+plt.tight_layout()
+plt.show()
+
+  3. Most Sixes by a Batsman
+  CODE-
+      sixes = df[df['batsman_runs'] == 6].groupby('batsman')['batsman_runs'].count().sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=sixes.values, y=sixes.index, palette='rocket')
+plt.title('Top 10 Batsmen by Number of Sixes')
+plt.xlabel('Number of Sixes')
+plt.ylabel('Batsman')
+plt.tight_layout()
+plt.show()
+
+  4. Most Economical Bowlers (min 100 overs)
+  CODE- 
+      bowler_stats = df.groupby('bowler').agg({'total_runs':'sum', 'ball':'count'})
+bowler_stats = bowler_stats[bowler_stats['ball'] >= 600]  # 100 overs = 600 balls
+bowler_stats['Economy'] = bowler_stats['total_runs'] / (bowler_stats['ball'] / 6)
+eco_bowlers = bowler_stats.sort_values('Economy').head(10)
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=eco_bowlers['Economy'], y=eco_bowlers.index, palette='Blues_d')
+plt.title('Top 10 Most Economical Bowlers (min 100 overs)')
+plt.xlabel('Economy Rate')
+plt.ylabel('Bowler')
+plt.tight_layout()
+plt.show()
+
+  5. Strike Rate of Top 10 Run Scorers 
+  CODE- 
+      balls_faced = df.groupby('batsman')['ball'].count()
+runs_scored = df.groupby('batsman')['batsman_runs'].sum()
+strike_rate = (runs_scored / balls_faced) * 100
+top_strike = strike_rate.loc[runs_scored.sort_values(ascending=False).head(10).index]
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=top_strike.values, y=top_strike.index, palette='flare')
+plt.title('Strike Rate of Top 10 Run Scorers')
+plt.xlabel('Strike Rate')
+plt.ylabel('Batsman')
+plt.tight_layout()
+plt.show()
+
+  6. Most Player of the Match Awards
+  CODE-
+      pom = matches['player_of_match'].value_counts().head(10)
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=pom.values, y=pom.index, palette='viridis')
+plt.title('Top 10 Players with Most Player of the Match Awards')
+plt.xlabel('Awards')
+plt.ylabel('Player')
+plt.tight_layout()
+plt.show()
+
+
+  EXIT
