@@ -2,6 +2,10 @@
 
 An interactive Streamlit dashboard for analyzing IPL player and team performances from 2008–2024.
 
+## 🚀 Live Demo
+
+https://your-app-name.streamlit.app
+
 ## 🚀 Features
 
 - 📊 IPL Overview Dashboard
