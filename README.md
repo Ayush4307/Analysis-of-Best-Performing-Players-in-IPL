@@ -4,7 +4,7 @@ An interactive Streamlit dashboard for analyzing IPL player and team performance
 
 ## 🚀 Live Demo
 
-https://your-app-name.streamlit.app
+https://ipl-player-analyzer.streamlit.app/
 
 ## 🚀 Features
 
