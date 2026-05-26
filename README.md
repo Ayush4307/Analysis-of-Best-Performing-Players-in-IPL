@@ -1,6 +1,6 @@
 # 🏏 IPL Player Performance Analyzer
 
-An interactive Streamlit dashboard for analyzing IPL player and team performances from 2008–2024.
+An Interactive Streamlit Dashboard for analyzing IPL player and team performances from 2008–2024.
 
 ## 🚀 Live Demo
 
@@ -24,6 +24,7 @@ https://ipl-player-analyzer.streamlit.app/
 - Streamlit
 - Pandas
 - Plotly
+- matplot
 
 ---
 
