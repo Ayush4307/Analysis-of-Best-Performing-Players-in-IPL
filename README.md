@@ -20,11 +20,10 @@ https://ipl-player-analyzer.streamlit.app/
 
 ## 🛠️ Tech Stack
 
-- Python
-- Streamlit
-- Pandas
-- Plotly
-- matplot
+- **Python** (Core logic)
+- **Streamlit** (Interactive web app framework)
+- **Pandas** (Data manipulation and analysis)
+- **Plotly** (Dynamic, interactive data visualizations)
 
 ---
 
