@@ -71,7 +71,7 @@ streamlit run app.py
 
 ## 📸 Dashboard Preview
 
-Features interactive charts and IPL statistics visualization.
+Features interactive Charts and IPL statistics visualization.
 
 ---
 
