@@ -173,9 +173,9 @@ elif sections == "Top Batsmen":
         use_container_width=True
     )
 
-# ---------------------------------------------------
+
 # TOP BOWLERS
-# ---------------------------------------------------
+
 elif sections == "Top Bowlers":
 
     st.header("🎯 Top Bowlers")
@@ -266,9 +266,8 @@ elif sections == "Top Bowlers":
         use_container_width=True
     )
 
-# ---------------------------------------------------
 # SEASON ANALYSIS
-# ---------------------------------------------------
+
 elif sections == "Season Analysis":
 
     st.header("📅 Season Analysis")
@@ -357,9 +356,9 @@ elif sections == "Team Analysis":
 
     st.plotly_chart(fig2, use_container_width=True)
 
-# ---------------------------------------------------
+
 # PLAYER SEARCH
-# ---------------------------------------------------
+
 elif sections == "Player Search":
 
     st.header("🔍 Player Search")
@@ -421,9 +420,6 @@ elif sections == "Player Search":
 
     st.plotly_chart(fig, use_container_width=True)
 
-# ---------------------------------------------------
-# FOOTER
-# ---------------------------------------------------
 st.divider()
 
 st.markdown(
