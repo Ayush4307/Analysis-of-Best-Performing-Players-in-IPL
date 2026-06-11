@@ -4,7 +4,7 @@ def analyze_toss_impact(csv_path='matches.csv'):
     """
     Analyzes how winning the toss affects the probability of winning the match.
     """
-    print("🏏 Starting Toss Impact Analysis...")
+    print("Starting Toss Impact Analysis...")
     
     try:
         matches = pd.read_csv(csv_path)
@@ -25,7 +25,7 @@ def analyze_toss_impact(csv_path='matches.csv'):
     print(f"Toss Win -> Match Win Percentage: {win_percentage:.2f}%\n")
     
     # Impact by decision (Bat vs Field)
-    print("🎯 Impact by Toss Decision:")
+    print("Impact by Toss Decision:")
     decision_impact = toss_winner_is_match_winner['toss_decision'].value_counts()
     for decision, count in decision_impact.items():
         total_decisions = len(matches[matches['toss_decision'] == decision])
@@ -44,7 +44,7 @@ def analyze_toss_impact(csv_path='matches.csv'):
     
     export_filename = 'toss_impact_summary.csv'
     summary_df.to_csv(export_filename, index=False)
-    print(f"\n✅ Successfully exported detailed venue breakdown to {export_filename}")
+    print(f"\nSuccessfully exported detailed venue breakdown to {export_filename}")
 
 if __name__ == "__main__":
     analyze_toss_impact()
