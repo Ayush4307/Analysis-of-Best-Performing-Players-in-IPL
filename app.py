@@ -49,6 +49,7 @@ sections = st.sidebar.radio(
         "Top Bowlers",
         "Season Analysis",
         "Team Analysis",
+        "Venue Analysis",
         "Player Search"
     ]
 )
@@ -357,7 +358,51 @@ elif sections == "Team Analysis":
     st.plotly_chart(fig2, use_container_width=True)
 
 
+# ---------------------------------------------------
+# VENUE ANALYSIS
+# ---------------------------------------------------
+elif sections == "Venue Analysis":
+
+    st.header("🏟️ Venue Analysis")
+    
+    st.markdown("Discover which stadiums have hosted the most matches and how the toss impacts the game.")
+    
+    venue_counts = matches["venue"].value_counts().reset_index()
+    venue_counts.columns = ["Venue", "Matches Hosted"]
+    
+    fig = px.bar(
+        venue_counts.head(10),
+        x="Matches Hosted",
+        y="Venue",
+        orientation="h",
+        color="Matches Hosted",
+        color_continuous_scale="teal",
+        title="Top 10 Venues by Matches Hosted"
+    )
+    fig.update_layout(yaxis=dict(autorange="reversed"))
+    st.plotly_chart(fig, use_container_width=True)
+    
+    st.divider()
+    
+    st.subheader("Toss Decision Impact at Top Venues")
+    top_venues = venue_counts.head(10)["Venue"].tolist()
+    top_venue_matches = matches[matches["venue"].isin(top_venues)]
+    
+    toss_decision = top_venue_matches.groupby(["venue", "toss_decision"]).size().reset_index(name="Count")
+    
+    fig2 = px.bar(
+        toss_decision,
+        x="venue",
+        y="Count",
+        color="toss_decision",
+        barmode="group",
+        title="Bat vs Field Decisions at Top Venues"
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+# ---------------------------------------------------
 # PLAYER SEARCH
+# ---------------------------------------------------
 
 elif sections == "Player Search":
 
